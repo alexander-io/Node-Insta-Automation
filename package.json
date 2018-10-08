@@ -1,0 +1,23 @@
+{
+  "name": "igjs",
+  "version": "1.0.0",
+  "description": "IgJs Javascript Instagram Scraper     =====================     Scrape Instagram for recent posts with Javascript client-side. No server-side processing needed!     -------------------------------------------------------------------------------    I wanted a quick and easy way to get posts from instagram and showcase them on a page.      Strictly for getting only info what can be found right on the landing page for a users public account. Nothing too fancy, but extremely easy to get implimented into any project.",
+  "main": "igjs.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NRandall/igjs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NRandall/igjs/issues"
+  },
+  "homepage": "https://github.com/NRandall/igjs#readme",
+  "dependencies": {
+    "xmlhttprequest": "^1.8.0"
+  }
+}

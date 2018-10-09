@@ -14,21 +14,26 @@ let main = () => {
 	return new Promise(async function(resolve, reject) {
 		num_users = (await funx.readFile('/users')).length;
 		(await funx.readFile('/users')).map(async (user) => {
-			let post = (await funx.getPosts(user))[0] ,
-					image_dir = "/" + post.user ,
-					image_path = "/" + post.code + ".jpg";
+			try {
+				let post = (await funx.getPosts(user))[0] ,
+						image_dir = "/" + post.user ,
+						image_path = "/" + post.code + ".jpg";
 
-			if (!fs.existsSync(__dirname +  '/data')) { fs.mkdirSync(__dirname + '/data') }
-			if (!fs.existsSync(__dirname + '/data' + image_dir)) { fs.mkdirSync(__dirname + '/data' + image_dir) }
-			if (!fs.existsSync(__dirname + '/data' + image_dir + image_path)) {
-				await funx.download(post.image, __dirname + '/data' + image_dir + image_path, function() {
-					// download complete
-					q.enqueue('/data' + image_dir + image_path)
+				if (!fs.existsSync(__dirname +  '/data')) { fs.mkdirSync(__dirname + '/data') }
+				if (!fs.existsSync(__dirname + '/data' + image_dir)) { fs.mkdirSync(__dirname + '/data' + image_dir) }
+				if (!fs.existsSync(__dirname + '/data' + image_dir + image_path)) {
+					await funx.download(post.image, __dirname + '/data' + image_dir + image_path, function() {
+						// download complete
+						q.enqueue('/data' + image_dir + image_path)
+						observed_users++;
+						observed_users == num_users ? resolve() : {}
+					})
+				} else {
+					console.log('file exists')
 					observed_users++;
-					observed_users == num_users ? resolve() : {}
-				})
-			} else {
-				console.log('file exists')
+				}
+			} catch (e) {
+				console.log(user ,e)
 				observed_users++;
 			}
 		})

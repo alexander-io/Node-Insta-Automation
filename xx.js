@@ -31,7 +31,7 @@ let main = () => {
 
 main().then(function(resolution, rejection) {
 	let  number_of_posts_made = 0;
-	while (number_of_posts_made < num_users) {
+	while (number_of_posts_made < q.supporting_array.length) {
 		setTimeout(function() {
 			Client.Session.create(device, storage, 'sato.shi.shi', 'whyisthissodifficult')
 				.then(function(session) {

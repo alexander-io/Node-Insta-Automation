@@ -7,7 +7,8 @@ var Client = require('instagram-private-api').V1
 , x = require('./x.js')
 , funx = new x.funx()
 , q = new x.q()
-, num_users;
+, num_users
+, observed_users = 0;
 
 let main = () => {
 	return new Promise(async function(resolve, reject) {
@@ -15,16 +16,21 @@ let main = () => {
 		(await funx.readFile('/users')).map(async (user) => {
 			let post = (await funx.getPosts(user))[0] ,
 					image_dir = "/" + post.user ,
-					image_path = "/" + post.code + ".jpg"
+					image_path = "/" + post.code + ".jpg";
+
 			if (!fs.existsSync(__dirname +  '/data')) { fs.mkdirSync(__dirname + '/data') }
 			if (!fs.existsSync(__dirname + '/data' + image_dir)) { fs.mkdirSync(__dirname + '/data' + image_dir) }
 			if (!fs.existsSync(__dirname + '/data' + image_dir + image_path)) {
 				await funx.download(post.image, __dirname + '/data' + image_dir + image_path, function() {
 					// download complete
 					q.enqueue('/data' + image_dir + image_path)
-					q.supporting_array.length == num_users ? resolve() : {}
+					observed_users++;
+					observed_users == num_users ? resolve() : {}
 				})
-			} else console.log('file exists')
+			} else {
+				console.log('file exists')
+				observed_users++;
+			}
 		})
 	})
 }

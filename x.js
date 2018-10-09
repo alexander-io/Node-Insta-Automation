@@ -1,6 +1,7 @@
-var fs = require('fs'), readline = require('readline')
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-var request = require('request');
+var fs = require('fs'),
+    readline = require('readline'),
+    XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest,
+    request = require('request');
 
 module.exports = {
   funx : class {
@@ -8,7 +9,6 @@ module.exports = {
       return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         const url = 'https://allorigins.me/get?url=' + encodeURIComponent('https://instagram.com/' + user + '/')
-
         xhr.open("GET", url);
         xhr.onload = () => resolve(this.formatPosts(xhr.responseText, user));
         xhr.onerror = () => reject(xhr.statusText);

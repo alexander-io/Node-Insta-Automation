@@ -1,13 +1,13 @@
 
-var Client = require('instagram-private-api').V1;
-var device = new Client.Device('sato.shi.shi');
-var storage = new Client.CookieFileStorage(__dirname + '/cookies/someuser.json');
-var fs = require('fs');
-var request = require('request');
-var x = require('./x.js');
-var funx = new x.funx();
-var q = new x.q();
-var num_users;
+var Client = require('instagram-private-api').V1
+, device = new Client.Device('sato.shi.shi')
+, storage = new Client.CookieFileStorage(__dirname + '/cookies/someuser.json')
+, fs = require('fs')
+, request = require('request')
+, x = require('./x.js')
+, funx = new x.funx()
+, q = new x.q()
+, num_users;
 
 let main = () => {
 	return new Promise(async function(resolve, reject) {
@@ -18,11 +18,13 @@ let main = () => {
 					image_path = "/" + post.code + ".jpg"
 			if (!fs.existsSync(__dirname +  '/data')) { fs.mkdirSync(__dirname + '/data') }
 			if (!fs.existsSync(__dirname + '/data' + image_dir)) { fs.mkdirSync(__dirname + '/data' + image_dir) }
-			await funx.download(post.image, __dirname + '/data' + image_dir + image_path, function() {
-				// download complete
-				q.enqueue('/data' + image_dir + image_path)
-				q.supporting_array.length == num_users ? resolve() : {}
-			})
+			if (!fs.existsSync(__dirname + '/data' + image_dir + image_path)) {
+				await funx.download(post.image, __dirname + '/data' + image_dir + image_path, function() {
+					// download complete
+					q.enqueue('/data' + image_dir + image_path)
+					q.supporting_array.length == num_users ? resolve() : {}
+				})
+			} else console.log('file exists')
 		})
 	})
 }

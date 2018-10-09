@@ -2,35 +2,30 @@
 var Client = require('instagram-private-api').V1;
 var device = new Client.Device('sato.shi.shi');
 var storage = new Client.CookieFileStorage(__dirname + '/cookies/someuser.json');
-var x = require('./x.js');
 var fs = require('fs');
 var request = require('request');
-var funx = new x.x();
+var x = require('./x.js');
+var funx = new x.funx();
 var q = new x.q();
 var num_users;
 
 let main = () => {
-	return new Promise(function(resolve, reject) {
-		(async () => {
-			num_users = (await funx.readFile('/users')).length;
-			(await funx.readFile('/users')).map(async (user) => {
-				let post = (await funx.getPosts(user))[0]
-				let image_dir = "/" + post.user
-				let image_path = "/" + post.code + ".jpg"
-				if (!fs.existsSync(__dirname +  '/data')) { fs.mkdirSync(__dirname + '/data') }
-				if (!fs.existsSync(__dirname + '/data' + image_dir)) { fs.mkdirSync(__dirname + '/data' + image_dir) }
-				await funx.download(post.image, __dirname + '/data' + image_dir + image_path, function() {
-					console.log('downloaded')
-					q.enqueue('/data' + image_dir + image_path)
-					if (q.supporting_array.length == num_users) {
-						resolve()
-					}
-				})
+	return new Promise(async function(resolve, reject) {
+		num_users = (await funx.readFile('/users')).length;
+		(await funx.readFile('/users')).map(async (user) => {
+			let post = (await funx.getPosts(user))[0] ,
+					image_dir = "/" + post.user ,
+					image_path = "/" + post.code + ".jpg"
+			if (!fs.existsSync(__dirname +  '/data')) { fs.mkdirSync(__dirname + '/data') }
+			if (!fs.existsSync(__dirname + '/data' + image_dir)) { fs.mkdirSync(__dirname + '/data' + image_dir) }
+			await funx.download(post.image, __dirname + '/data' + image_dir + image_path, function() {
+				// download complete
+				q.enqueue('/data' + image_dir + image_path)
+				q.supporting_array.length == num_users ? resolve() : {}
 			})
-		})()
+		})
 	})
 }
-
 
 main().then(function(resolution, rejection) {
 	let  number_of_posts_made = 0;

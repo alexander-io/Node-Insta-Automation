@@ -3,7 +3,7 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var request = require('request');
 
 module.exports = {
-  x : class {
+  funx : class {
     getPosts(user) {
       return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
@@ -19,19 +19,23 @@ module.exports = {
     formatPosts(rawPosts, username) {
       let result = [];
       rawPosts = JSON.parse(rawPosts)
-      rawPosts = JSON.parse(rawPosts.contents.split('window._sharedData = ')[1].split('\;\<\/script>')[0]).entry_data.ProfilePage[0].graphql.user.edge_owner_to_timeline_media.edges
-      rawPosts.forEach(function (item) {
-        result.push({
-          user : username,
-          image: item.node.display_url,
-          dimensions: item.node.dimensions,
-          likes: item.node.edge_liked_by.count,
-          video: item.node.is_video,
-          code: item.node.shortcode,
-          url: 'https://instagram.com/p/' + item.node.shortcode,
-          timestamp: item.node.taken_at_timestamp
+      try {
+        rawPosts = JSON.parse(rawPosts.contents.split('window._sharedData = ')[1].split('\;\<\/script>')[0]).entry_data.ProfilePage[0].graphql.user.edge_owner_to_timeline_media.edges
+        rawPosts.forEach(function (item) {
+          result.push({
+            user : username,
+            image: item.node.display_url,
+            dimensions: item.node.dimensions,
+            likes: item.node.edge_liked_by.count,
+            video: item.node.is_video,
+            code: item.node.shortcode,
+            url: 'https://instagram.com/p/' + item.node.shortcode,
+            timestamp: item.node.taken_at_timestamp
+          })
         })
-      })
+      } catch (e) {
+        console.log(e)
+      }
       return result;
     }
 

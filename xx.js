@@ -32,10 +32,11 @@ let main = () => {
 				await funx.download(all_posts[i].image, __dirname + '/data' + image_dir + image_path, function() {
 					// download complete
 					q.enqueue('/data' + image_dir + image_path)
-					i == all_posts.length-1 ? resolve() : {}
+					i == all_posts.length-1 ? resolve() : {}				
 				})
 			} else {
 				console.log('file exists')
+				i == all_posts.length-1 ? resolve() : {}
 			}
 		}
 	})

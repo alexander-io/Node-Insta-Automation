@@ -7,52 +7,52 @@ var Client = require('instagram-private-api').V1
 , x = require('./x.js')
 , funx = new x.funx()
 , q = new x.q()
-, num_users
 , observed_users = 0;
 
 let main = () => {
 	return new Promise(async function(resolve, reject) {
-		num_users = (await funx.readFile('/users')).length;
-		(await funx.readFile('/users')).map(async (user) => {
-			try {
-				let post = (await funx.getPosts(user))[0] ,
-						image_dir = "/" + post.user ,
-						image_path = "/" + post.code + ".jpg";
-
-				if (!fs.existsSync(__dirname +  '/data')) { fs.mkdirSync(__dirname + '/data') }
-				if (!fs.existsSync(__dirname + '/data' + image_dir)) { fs.mkdirSync(__dirname + '/data' + image_dir) }
-				if (!fs.existsSync(__dirname + '/data' + image_dir + image_path)) {
-					await funx.download(post.image, __dirname + '/data' + image_dir + image_path, function() {
-						// download complete
-						q.enqueue('/data' + image_dir + image_path)
-						observed_users++;
-						observed_users == num_users ? resolve() : {}
-					})
-				} else {
-					console.log('file exists')
-					observed_users++;
-				}
-			} catch (e) {
-				console.log(user ,e)
-				observed_users++;
+		var list_of_users = (await funx.readFile('/users'))
+		console.log(list_of_users)
+		var all_posts = [];
+		for (let i = 0; i < list_of_users.length; i++) {
+			let posts = (await funx.getPosts(list_of_users[i]))
+			for (post in posts) {
+				all_posts.push(posts[post])
 			}
-		})
+		}
+		all_posts.filter(post => post.is_video == false)
+		console.log(all_posts)
+		console.log(all_posts.length)
+		for (let i = 0; i < all_posts.length; i++) {
+			let image_dir = "/" + all_posts[i].user,
+					image_path = "/" + all_posts[i].code + ".jpg";
+			if (!fs.existsSync(__dirname +  '/data')) { fs.mkdirSync(__dirname + '/data') }
+			if (!fs.existsSync(__dirname + '/data' + image_dir)) { fs.mkdirSync(__dirname + '/data' + image_dir) }
+			if (!fs.existsSync(__dirname + '/data' + image_dir + image_path)) {
+				await funx.download(all_posts[i].image, __dirname + '/data' + image_dir + image_path, function() {
+					// download complete
+					q.enqueue('/data' + image_dir + image_path)
+					i == all_posts.length-1 ? resolve() : {}
+				})
+			} else {
+				console.log('file exists')
+			}
+		}
 	})
 }
 
-main().then(function(resolution, rejection) {
-	let  number_of_posts_made = 0;
-	while (number_of_posts_made < q.supporting_array.length) {
-		setTimeout(function() {
-			Client.Session.create(device, storage, 'sato.shi.shi', 'whyisthissodifficult')
-				.then(function(session) {
-					Client.Upload.photo(session, __dirname + q.dequeue())
-					.then(function(upload) {
-						number_of_posts_made++;
-						return Client.Media.configurePhoto(session, upload.params.uploadId, 'akward caption');
-					})
-				})
-		}, 1000 * (number_of_posts_made*10))
-		number_of_posts_made++
+main().then(async function(resolution, rejection) {
+	while (q.supporting_array.length > 0) {
+		Client.Session.create(device, storage, 'sato.shi.shi', 'whyisthissodifficult')
+		.then(function(session) {
+			let next_post = q.dequeue()
+			console.log('posting', next_post)
+			console.log('\tremaining queue length :', q.supporting_array.length)
+			Client.Upload.photo(session, __dirname + next_post)
+			.then(function(upload) {
+				return Client.Media.configurePhoto(session, upload.params.uploadId, 'awkward caption');
+			})
+		})
+		await funx.sleep(10000)
 	}
 })

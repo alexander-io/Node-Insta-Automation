@@ -60,6 +60,12 @@ module.exports = {
         request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
       });
     }
+    sleep(ms) {
+      return new Promise(resolve => {
+        setTimeout(resolve, ms)
+      })
+    }
+
   },
   q : class {
     constructor() {
@@ -73,40 +79,3 @@ module.exports = {
     }
   }
 }
-
-
-// v0.0.4
-// (async () => {
-//   (await readFile('/users')).map(async (user) => {
-//     console.log((await getPosts(user))[0])
-//   })
-// })()
-
-// v0.0.1
-// readFile('/./readme').then((resolution, rejection) => {
-//   resolution.map((user) => {
-//     getPosts(user).then((resolution, rejection) => {
-//       console.log(resolution[0]);
-//     })
-//   })
-// })
-
-// v0.0.2
-// readFile('/./readme').then((resolution, rejection) => {
-//   console.log('reading')
-//   resolution.map((user) => {
-//     (async () => {
-//       let posts =  await getPosts(user)
-//       console.log(posts[0])
-//     })()
-//   })
-// })
-
-// v0.0.3
-// (async () => {
-//   let list_of_users = await readFile('/./readme')
-//   list_of_users.map(async (user) => {
-//     let posts = await getPosts(user)
-//     console.log(posts[0])
-//   })
-// })()

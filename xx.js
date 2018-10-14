@@ -29,11 +29,11 @@ let main = () => {
 			if (!fs.existsSync(__dirname +  '/data')) { fs.mkdirSync(__dirname + '/data') }
 			if (!fs.existsSync(__dirname + '/data' + image_dir)) { fs.mkdirSync(__dirname + '/data' + image_dir) }
 			if (!fs.existsSync(__dirname + '/data' + image_dir + image_path)) {
-				await funx.download(all_posts[i].image, __dirname + '/data' + image_dir + image_path, function() {
-					// download complete
-					q.enqueue('/data' + image_dir + image_path)
-					i == all_posts.length-1 ? resolve() : {}				
-				})
+				await funx.download(all_posts[i].image, __dirname + '/data' + image_dir + image_path).then((resolution, rejection) => {})
+				console.log('enqueue')
+				q.enqueue('/data' + image_dir + image_path)
+				console.log(i, ':', all_posts.length)
+				i == all_posts.length-1 ? resolve() : {}
 			} else {
 				console.log('file exists')
 				i == all_posts.length-1 ? resolve() : {}
@@ -44,14 +44,15 @@ let main = () => {
 
 main().then(async function(resolution, rejection) {
 	while (q.supporting_array.length > 0) {
+		let next_post = q.dequeue()
 		Client.Session.create(device, storage, 'sato.shi.shi', 'whyisthissodifficult')
 		.then(function(session) {
-			let next_post = q.dequeue()
 			console.log('posting', next_post)
 			console.log('\tremaining queue length :', q.supporting_array.length)
 			Client.Upload.photo(session, __dirname + next_post)
 			.then(function(upload) {
-				return Client.Media.configurePhoto(session, upload.params.uploadId, 'awkward caption');
+				console.log('\tfinishing posting', next_post)
+				return Client.Media.configurePhoto(session, upload.params.uploadId, ":::"+next_post);
 			})
 		})
 		await funx.sleep(10000)

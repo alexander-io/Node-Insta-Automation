@@ -7,10 +7,12 @@ var Client = require('instagram-private-api').V1
 , x = require('./x.js')
 , funx = new x.funx()
 , q = new x.q()
-, observed_users = 0;
+, observed_users = 0,
+child_process = require('child_process');
 
 let main = () => {
 	return new Promise(async function(resolve, reject) {
+		child_process.execSync('rm -rf ' + __dirname + '/data/*');
 		var list_of_users = (await funx.readFile('/users'))
 		console.log(list_of_users)
 		var all_posts = [];
@@ -29,9 +31,13 @@ let main = () => {
 			if (!fs.existsSync(__dirname +  '/data')) { fs.mkdirSync(__dirname + '/data') }
 			if (!fs.existsSync(__dirname + '/data' + image_dir)) { fs.mkdirSync(__dirname + '/data' + image_dir) }
 			if (!fs.existsSync(__dirname + '/data' + image_dir + image_path)) {
-				await funx.download(all_posts[i].image, __dirname + '/data' + image_dir + image_path).then((resolution, rejection) => {})
-				console.log('enqueue')
-				q.enqueue('/data' + image_dir + image_path)
+				try {
+					await funx.download(all_posts[i].image, __dirname + '/data' + image_dir + image_path).then((resolution, rejection) => {})
+					console.log('enqueue')
+					q.enqueue('/data' + image_dir + image_path)
+				} catch (e) {
+					console.log(e)
+				}
 				console.log(i, ':', all_posts.length)
 				i == all_posts.length-1 ? resolve() : {}
 			} else {
@@ -42,19 +48,54 @@ let main = () => {
 	})
 }
 
+
+// (async function() {
+// 	while (true) {
+// 		await main()
+// 		while (q.supporting_array.length > 0) {
+// 			Client.Session.create(device, storage, 'sato.shi.shi', 'whyisthissodifficult')
+// 			.then(function(session) {
+// 				console.log('posting', next_post)
+// 				console.log('\tremaining queue length :', q.supporting_array.length)
+// 				Client.Upload.photo(session, __dirname + next_post)
+// 				.then(function(upload) {
+// 					// upload instanceof Client.Upload
+// 					// nothing more than just keeping upload id
+// 					console.log(upload.params.uploadId);
+// 					return Client.Media.configurePhoto(session, upload.params.uploadId, 'truck');
+// 				})
+// 				.then(function(medium) {
+// 					// we configure medium, it is now visible with caption
+// 					console.log(medium.params)
+// 				})
+// 			})
+// 			await funx.sleep(10000)
+// 		}
+// 	}
+// })()
+
+// x()
 main().then(async function(resolution, rejection) {
 	while (q.supporting_array.length > 0) {
 		let next_post = q.dequeue()
-		Client.Session.create(device, storage, 'sato.shi.shi', 'whyisthissodifficult')
+
+		Client.Session.create(device, storage, 'dope.truck', 'whyisthissodifficult')
 		.then(function(session) {
 			console.log('posting', next_post)
 			console.log('\tremaining queue length :', q.supporting_array.length)
 			Client.Upload.photo(session, __dirname + next_post)
 			.then(function(upload) {
-				console.log('\tfinishing posting', next_post)
-				return Client.Media.configurePhoto(session, upload.params.uploadId, ":::"+next_post);
+				// upload instanceof Client.Upload
+				// nothing more than just keeping upload id
+				console.log(upload.params.uploadId);
+				return Client.Media.configurePhoto(session, upload.params.uploadId, next_post);
+			})
+			.then(function(medium) {
+				// we configure medium, it is now visible with caption
+				console.log(medium.params)
+				q.enqueue(next_post)
 			})
 		})
-		await funx.sleep(10000)
+		await funx.sleep(1000000)
 	}
 })

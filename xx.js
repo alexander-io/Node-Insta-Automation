@@ -1,6 +1,6 @@
 
 var Client = require('instagram-private-api').V1
-, device = new Client.Device('sato.shi.shi')
+, device = new Client.Device(process.argv[2])
 , storage = new Client.CookieFileStorage(__dirname + '/cookies/someuser.json')
 , fs = require('fs')
 , request = require('request')
@@ -12,16 +12,21 @@ child_process = require('child_process');
 
 let main = () => {
 	return new Promise(async function(resolve, reject) {
+		console.log('removing previously existing data')
 		child_process.execSync('rm -rf ' + __dirname + '/data/*');
-		var list_of_users = (await funx.readFile('/users'))
+		console.log('reading in file of users')
+		var list_of_users = (await funx.readFile(process.argv[4]))
 		console.log(list_of_users)
 		var all_posts = [];
 		for (let i = 0; i < list_of_users.length; i++) {
+			console.log('request posts for user :', list_of_users[i])
 			let posts = (await funx.getPosts(list_of_users[i]))
+			console.log('merge posts of user :', list_of_users[i])
 			for (post in posts) {
 				all_posts.push(posts[post])
 			}
 		}
+		console.log('filtering out video posts...')
 		all_posts.filter(post => post.is_video == false)
 		console.log(all_posts)
 		console.log(all_posts.length)
@@ -79,7 +84,7 @@ main().then(async function(resolution, rejection) {
 	while (q.supporting_array.length > 0) {
 		let next_post = q.dequeue()
 
-		Client.Session.create(device, storage, 'dope.truck', 'whyisthissodifficult')
+		Client.Session.create(device, storage, process.argv[2], process.argv[3])
 		.then(function(session) {
 			console.log('posting', next_post)
 			console.log('\tremaining queue length :', q.supporting_array.length)
@@ -88,7 +93,7 @@ main().then(async function(resolution, rejection) {
 				// upload instanceof Client.Upload
 				// nothing more than just keeping upload id
 				console.log(upload.params.uploadId);
-				return Client.Media.configurePhoto(session, upload.params.uploadId, next_post);
+				return Client.Media.configurePhoto(session, upload.params.uploadId, next_post + " #truck");
 			})
 			.then(function(medium) {
 				// we configure medium, it is now visible with caption

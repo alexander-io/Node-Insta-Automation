@@ -1,7 +1,7 @@
 
 var Client = require('instagram-private-api').V1
 , device = new Client.Device(process.argv[2])
-, storage = new Client.CookieFileStorage(__dirname + '/cookies/someuser.json')
+, storage = new Client.CookieFileStorage(__dirname + '/cookies/' + process.argv[2] +  '.json')
 , fs = require('fs')
 , request = require('request')
 , x = require('./x.js')
@@ -53,33 +53,6 @@ let main = () => {
 	})
 }
 
-
-// (async function() {
-// 	while (true) {
-// 		await main()
-// 		while (q.supporting_array.length > 0) {
-// 			Client.Session.create(device, storage, 'sato.shi.shi', 'whyisthissodifficult')
-// 			.then(function(session) {
-// 				console.log('posting', next_post)
-// 				console.log('\tremaining queue length :', q.supporting_array.length)
-// 				Client.Upload.photo(session, __dirname + next_post)
-// 				.then(function(upload) {
-// 					// upload instanceof Client.Upload
-// 					// nothing more than just keeping upload id
-// 					console.log(upload.params.uploadId);
-// 					return Client.Media.configurePhoto(session, upload.params.uploadId, 'truck');
-// 				})
-// 				.then(function(medium) {
-// 					// we configure medium, it is now visible with caption
-// 					console.log(medium.params)
-// 				})
-// 			})
-// 			await funx.sleep(10000)
-// 		}
-// 	}
-// })()
-
-// x()
 main().then(async function(resolution, rejection) {
 	while (q.supporting_array.length > 0) {
 		let next_post = q.dequeue()
@@ -101,6 +74,6 @@ main().then(async function(resolution, rejection) {
 				q.enqueue(next_post)
 			})
 		})
-		await funx.sleep(1000000)
+		await funx.sleep(process.argv[5])
 	}
 })

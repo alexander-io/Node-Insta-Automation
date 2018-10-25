@@ -53,6 +53,20 @@ let main = () => {
 	})
 }
 
+let captions = {
+	'pug.legendary' : [
+		'\n#pugs #pug #pugsofinstagram #puglife #dog #puglove #dogsofinstagram #dogs #pugnation #pugsnotdrugs #puppy #cute #pugpuppy #pugworld #pugstagram #pugoftheday',
+		'\n#puglovers #instapug #pugdog #dogstagram #puppiesofinstagram #puglover #love #like #pugloversclub #mops #pugbasement #puppies #puggle',
+		'\n#pets #instadog #petsofinstagram #pugpuppies #puggy #follow #dogsofinsta #worldofpug #pugsofig #popularpugs #fawnpug #pugglesofinstagram #smilingpugs',
+		'\n#dogoftheday #pugsrule #blackpug #pet #puglia #instagram #doglover #of #ilovemydog #carlino #ilovemypug #baby #dailypug #sophiathepugg #pugstyle #pugsoninstagram #dailydoseofpugs'
+	],
+	'dope.truck' : [
+		"\nRate this truck 1 - "+ Math.ceil(Math.random()*1000%150) +"\n\nTag a friend that would drive this truck : @truckporn \n\n#trucks #f #truck #x #ford #chevy #truckporn #dodge #offroad #diesel #trucking #trucksofinstagram #liftedtrucks #lifted #duramax #ram #cars #trucklife",
+		"\nRate this truck 1 - "+ Math.ceil(Math.random()*1000%150) +"\n\nTag a friend that would drive this truck : @truckporn \n\n#trucker #v #cummins #truckdaily #powerstroke #trucknation #gmc #dieseltrucks #s #truckdriver #truckerhat",
+		"\nRate this truck 1 - "+ Math.ceil(Math.random()*1000%150) +"\n\nTag a friend that would drive this truck : @truckporn \n\n#truck #4x4 #liftedtrucks #truckporn #yota #chevy #dodge #ford #offroad"
+	]
+}
+
 main().then(async function(resolution, rejection) {
 	while (q.supporting_array.length > 0) {
 		let next_post = q.dequeue()
@@ -66,7 +80,10 @@ main().then(async function(resolution, rejection) {
 				// upload instanceof Client.Upload
 				// nothing more than just keeping upload id
 				console.log(upload.params.uploadId);
-				return Client.Media.configurePhoto(session, upload.params.uploadId, next_post + " #truck");
+				let captions_list = captions[process.argv[2]]
+				let random_caption = captions_list[Math.floor(Math.random()*10%captions_list.length)]
+
+				return Client.Media.configurePhoto(session, upload.params.uploadId, next_post + random_caption );
 			})
 			.then(function(medium) {
 				// we configure medium, it is now visible with caption

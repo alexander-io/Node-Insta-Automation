@@ -19,6 +19,7 @@
   "homepage": "",
   "dependencies": {
     "instagram-private-api": "^0.6.8",
+    "instagram-scraping": "^1.0.10",
     "request": "^2.88.0",
     "xmlhttprequest": "^1.8.0"
   }

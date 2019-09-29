@@ -1,6 +1,6 @@
 node_modules
 cookies
-lists
+lists/*
 data/*
 run.sh
 x.sh

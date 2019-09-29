@@ -1,4 +1,4 @@
-
+// node x.js <username> <pw> <list_of_users> <time_between_posts>
 var Client = require('instagram-private-api').V1
 , device = new Client.Device(process.argv[2])
 , storage = new Client.CookieFileStorage(__dirname + '/cookies/' + process.argv[2] +  '.json')
@@ -15,12 +15,18 @@ let main = () => {
 		console.log('removing previously existing data')
 		child_process.execSync('rm -rf ' + __dirname + '/data/*');
 		console.log('reading in file of users')
-		var list_of_users = (await funx.readFile(process.argv[4]))
+		var list_of_users = (await funx.readFile('/'+process.argv[4]))
 		console.log(list_of_users)
 		var all_posts = [];
 		for (let i = 0; i < list_of_users.length; i++) {
 			console.log('request posts for user :', list_of_users[i])
-			let posts = (await funx.getPosts(list_of_users[i]))
+			let posts
+			try {
+				posts = (await funx.getPosts(list_of_users[i]))
+			} catch (e) {
+				console.log(e)
+			}
+			console.log(posts)
 			console.log('merge posts of user :', list_of_users[i])
 			for (post in posts) {
 				all_posts.push(posts[post])
@@ -68,6 +74,7 @@ let captions = {
 }
 
 main().then(async function(resolution, rejection) {
+	console.log('eh')
 	while (q.supporting_array.length > 0) {
 		let next_post = q.dequeue()
 

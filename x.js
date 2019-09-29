@@ -7,9 +7,11 @@ module.exports = {
   funx : class {
     getPosts(user) {
       return new Promise((resolve, reject) => {
+        console.log('get post')
         const xhr = new XMLHttpRequest();
         const url = 'https://allorigins.me/get?url=' + encodeURIComponent('https://instagram.com/' + user + '/')
         xhr.open("GET", url);
+        // console.log('xhr response : ' + xhr.responseText)
         xhr.onload = () => resolve(this.formatPosts(xhr.responseText, user));
         xhr.onerror = () => reject(xhr.statusText);
         xhr.send();

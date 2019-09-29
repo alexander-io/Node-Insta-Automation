@@ -26,12 +26,17 @@ let main = () => {
 			} catch (e) {
 				console.log(e)
 			}
-			console.log(posts)
+			// console.log(posts)
 			console.log('merge posts of user :', list_of_users[i])
 			for (post in posts) {
 				all_posts.push(posts[post])
 			}
 		}
+		console.log(all_posts)
+		console.log('total number of posts ' + all_posts.length)
+		console.log('done')
+		process.exit(0)
+
 		console.log('filtering out video posts...')
 		all_posts.filter(post => post.is_video == false)
 		console.log(all_posts)

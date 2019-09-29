@@ -1,20 +1,19 @@
 var fs = require('fs'),
     readline = require('readline'),
-    XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest,
+    ig_scrape = require('instagram-scraping'),
+    // XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest,
     request = require('request');
 
 module.exports = {
   funx : class {
     getPosts(user) {
       return new Promise((resolve, reject) => {
-        console.log('get post')
-        const xhr = new XMLHttpRequest();
-        const url = 'https://allorigins.me/get?url=' + encodeURIComponent('https://instagram.com/' + user + '/')
-        xhr.open("GET", url);
-        // console.log('xhr response : ' + xhr.responseText)
-        xhr.onload = () => resolve(this.formatPosts(xhr.responseText, user));
-        xhr.onerror = () => reject(xhr.statusText);
-        xhr.send();
+        console.log('get posttt')
+        // TODO : scrapeUserPage() or scrapeTag() ?
+        ig_scrape.scrapeUserPage(user).then((result) => {
+          console.log(result.medias)
+          resolve(result.medias)
+        })
       });
     }
 

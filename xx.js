@@ -1,4 +1,14 @@
+// to exec, require command line args :
 // node x.js <username> <pw> <list_of_users> <time_between_posts>
+let exit_need_args = () => {
+	console.log('too few args')
+	console.log('node x.js <username> <pw> <list_of_users> <time_between_posts>')
+}
+
+process.argv[2] && process.argv[3] && process.argv[4] ? {} : exit_need_args()
+
+process.exit(0)
+
 var Client = require('instagram-private-api').V1
 , device = new Client.Device(process.argv[2])
 , storage = new Client.CookieFileStorage(__dirname + '/cookies/' + process.argv[2] +  '.json')

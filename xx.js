@@ -5,9 +5,8 @@ let exit_need_args = () => {
 	console.log('node x.js <username> <pw> <list_of_users> <time_between_posts>')
 }
 
+// did  user  provide  cmd line  args? exit if missing
 process.argv[2] && process.argv[3] && process.argv[4] ? {} : exit_need_args()
-
-process.exit(0)
 
 var Client = require('instagram-private-api').V1
 , device = new Client.Device(process.argv[2])
@@ -17,8 +16,8 @@ var Client = require('instagram-private-api').V1
 , x = require('./x.js')
 , funx = new x.funx()
 , q = new x.q()
-, observed_users = 0,
-child_process = require('child_process');
+, observed_users = 0
+, child_process = require('child_process');
 
 let main = () => {
 	return new Promise(async function(resolve, reject) {
@@ -36,7 +35,7 @@ let main = () => {
 			} catch (e) {
 				console.log(e)
 			}
-			// console.log(posts)
+
 			console.log('merge posts of user :', list_of_users[i])
 			for (post in posts) {
 				all_posts.push(posts[post])
@@ -45,12 +44,9 @@ let main = () => {
 		console.log(all_posts)
 		console.log('total number of posts ' + all_posts.length)
 		console.log('done')
+		// TODO
 		process.exit(0)
 
-		console.log('filtering out video posts...')
-		all_posts.filter(post => post.is_video == false)
-		console.log(all_posts)
-		console.log(all_posts.length)
 		for (let i = 0; i < all_posts.length; i++) {
 			let image_dir = "/" + all_posts[i].user,
 					image_path = "/" + all_posts[i].code + ".jpg";

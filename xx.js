@@ -25,10 +25,14 @@ let main = () => {
 		child_process.execSync('rm -rf ' + __dirname + '/data/*');
 		console.log('reading in file of users')
 		var list_of_users = (await funx.readFile('/'+process.argv[4]))
-		console.log(list_of_users)
+
+		// TODO
+		// console.log(list_of_users)
+
 		var all_posts = [];
 		for (let i = 0; i < list_of_users.length; i++) {
-			console.log('request posts for user :', list_of_users[i])
+			// TODO
+			// console.log('request posts for user :', list_of_users[i])
 			let posts
 			try {
 				posts = (await funx.getPosts(list_of_users[i]))
@@ -36,25 +40,28 @@ let main = () => {
 				console.log(e)
 			}
 
-			console.log('merge posts of user :', list_of_users[i])
 			for (post in posts) {
 				all_posts.push(posts[post])
 			}
 		}
-		console.log(all_posts)
-		console.log('total number of posts ' + all_posts.length)
-		console.log('done')
-		// TODO
-		process.exit(0)
+
+		// console.log(all_posts)
+		// console.log('total number of posts ' + all_posts.length)
 
 		for (let i = 0; i < all_posts.length; i++) {
-			let image_dir = "/" + all_posts[i].user,
-					image_path = "/" + all_posts[i].code + ".jpg";
+
+			// build directory
+			let image_dir = "/" + all_posts[i].owner_id,
+					image_path = "/" + all_posts[i].media_id + ".jpg";
+
+
 			if (!fs.existsSync(__dirname +  '/data')) { fs.mkdirSync(__dirname + '/data') }
 			if (!fs.existsSync(__dirname + '/data' + image_dir)) { fs.mkdirSync(__dirname + '/data' + image_dir) }
 			if (!fs.existsSync(__dirname + '/data' + image_dir + image_path)) {
 				try {
-					await funx.download(all_posts[i].image, __dirname + '/data' + image_dir + image_path).then((resolution, rejection) => {})
+					// try to download image
+					// try to place/organize image in corresponding directory
+					await funx.download(all_posts[i].display_url, __dirname + '/data' + image_dir + image_path).then((resolution, rejection) => {})
 					console.log('enqueue')
 					q.enqueue('/data' + image_dir + image_path)
 				} catch (e) {
@@ -85,7 +92,10 @@ let captions = {
 }
 
 main().then(async function(resolution, rejection) {
-	console.log('eh')
+	console.log('done')
+	// TODO
+	process.exit(0)
+
 	while (q.supporting_array.length > 0) {
 		let next_post = q.dequeue()
 

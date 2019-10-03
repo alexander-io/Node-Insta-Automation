@@ -102,31 +102,9 @@ main().then(async function(resolution, rejection) {
 
 	while (q.supporting_array.length > 0) {
 		let next_post = q.dequeue()
+		// TODO
+		// upload image
 
-		Client.Session.create(device, storage, process.argv[2], process.argv[3])
-		.then(function(session) {
-
-			// TODO
-			console.log('client session created')
-
-			console.log('posting', next_post)
-			console.log('\tremaining queue length :', q.supporting_array.length)
-			Client.Upload.photo(session, __dirname + next_post)
-			.then(function(upload) {
-				// upload instanceof Client.Upload
-				// nothing more than just keeping upload id
-				// console.log(upload.params.uploadId);
-				// let captions_list = captions[process.argv[2]]
-				// let random_caption = captions_list[Math.floor(Math.random()*10%captions_list.length)]
-
-				// return Client.Media.configurePhoto(session, upload.params.uploadId, next_post + random_caption );
-			})
-			// .then(function(medium) {
-			// 	// we configure medium, it is now visible with caption
-			// 	console.log(medium.params)
-			// 	q.enqueue(next_post)
-			// })
-		})
 		await funx.sleep(process.argv[5])
 	}
 })

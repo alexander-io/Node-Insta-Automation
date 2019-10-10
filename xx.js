@@ -1,4 +1,8 @@
+var IgApiClient = require('instagram-private-api'),
+Bluebird = require('bluebird');
+const ig = new IgApiClient.IgApiClient();
 
+// process.exit(0)
 
 // to exec, require command line args :
 // node x.js <username> <pw> <list_of_users> <time_between_posts>
@@ -10,9 +14,6 @@ let exit_need_args = () => {
 // did  user  provide  cmd line  args? exit if missing
 process.argv[2] && process.argv[3] && process.argv[4] ? {} : exit_need_args()
 
-// var Client = require('instagram-private-api').V1
-// , device = new Client.Device(process.argv[2])
-// , storage = new Client.CookieFileStorage(__dirname + '/cookies/' + process.argv[2] +  '.json')
 var fs = require('fs')
 , request = require('request')
 , x = require('./x.js')
@@ -93,10 +94,37 @@ let captions = {
 	]
 }
 
+// login
+async function login() {
+  // basic login-procedure
+  ig.state.generateDevice(process.argv[2]);
+  ig.state.proxyUrl = process.env.IG_PROXY;
+  await ig.account.login(process.argv[2], process.argv[3]);
+}
+
 main().then(async function(resolution, rejection) {
 	// console.log('done')
 	// TODO
 	// process.exit(0)
+
+	await login()
+	console.log('finished login')
+
+	const { latitude, longitude, searchQuery } = {
+	    latitude: 0.0,
+	    longitude: 0.0,
+	    // not required
+	    searchQuery: 'place',
+	};
+
+
+	const locations = await ig.search.location(latitude, longitude, searchQuery);
+
+
+	const mediaLocation = locations[0];
+
+	// process.exit(0)
+
 
 	// TODO
 	console.log('finished main')
@@ -106,7 +134,11 @@ main().then(async function(resolution, rejection) {
 		let next_post = q.dequeue()
 		// TODO
 		// upload image
-		console.log(next_post)
+		// console.log(next_post)
+		const publishResult = await ig.publish.photo({
+    	// read the file into a Buffer
+    	file: await Bluebird.fromCallback(cb => fs.readFile(__dirname + next_post, cb)), location: mediaLocation, caption: 'my caption', usertags: {},
+		});
 
 		await funx.sleep(process.argv[5])
 	}

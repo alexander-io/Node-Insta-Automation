@@ -1,3 +1,5 @@
+
+
 // to exec, require command line args :
 // node x.js <username> <pw> <list_of_users> <time_between_posts>
 let exit_need_args = () => {
@@ -8,10 +10,10 @@ let exit_need_args = () => {
 // did  user  provide  cmd line  args? exit if missing
 process.argv[2] && process.argv[3] && process.argv[4] ? {} : exit_need_args()
 
-var Client = require('instagram-private-api').V1
-, device = new Client.Device(process.argv[2])
-, storage = new Client.CookieFileStorage(__dirname + '/cookies/' + process.argv[2] +  '.json')
-, fs = require('fs')
+// var Client = require('instagram-private-api').V1
+// , device = new Client.Device(process.argv[2])
+// , storage = new Client.CookieFileStorage(__dirname + '/cookies/' + process.argv[2] +  '.json')
+var fs = require('fs')
 , request = require('request')
 , x = require('./x.js')
 , funx = new x.funx()
@@ -104,6 +106,7 @@ main().then(async function(resolution, rejection) {
 		let next_post = q.dequeue()
 		// TODO
 		// upload image
+		console.log(next_post)
 
 		await funx.sleep(process.argv[5])
 	}

@@ -1,9 +1,3 @@
-var IgApiClient = require('instagram-private-api'),
-Bluebird = require('bluebird');
-const ig = new IgApiClient.IgApiClient();
-
-// process.exit(0)
-
 // to exec, require command line args :
 // node x.js <username> <pw> <list_of_users> <time_between_posts>
 let exit_need_args = () => {
@@ -13,6 +7,11 @@ let exit_need_args = () => {
 
 // did  user  provide  cmd line  args? exit if missing
 process.argv[2] && process.argv[3] && process.argv[4] ? {} : exit_need_args()
+
+// requirements
+var IgApiClient = require('instagram-private-api'),
+Bluebird = require('bluebird');
+const ig = new IgApiClient.IgApiClient();
 
 var fs = require('fs')
 , request = require('request')
@@ -29,13 +28,9 @@ let main = () => {
 		console.log('reading in file of users')
 		var list_of_users = (await funx.readFile('/'+process.argv[4]))
 
-		// TODO
-		// console.log(list_of_users)
-
+		// get posts from each user, add them to queue
 		var all_posts = [];
 		for (let i = 0; i < list_of_users.length; i++) {
-			// TODO
-			// console.log('request posts for user :', list_of_users[i])
 			let posts
 			try {
 				posts = (await funx.getPosts(list_of_users[i]))
@@ -43,13 +38,12 @@ let main = () => {
 				console.log(e)
 			}
 
+			// add post to queue
 			for (post in posts) {
 				all_posts.push(posts[post])
 			}
 		}
 
-		// console.log(all_posts)
-		// console.log('total number of posts ' + all_posts.length)
 
 		for (let i = 0; i < all_posts.length; i++) {
 
@@ -65,7 +59,8 @@ let main = () => {
 					// try to download image
 					// try to place/organize image in corresponding directory
 					await funx.download(all_posts[i].display_url, __dirname + '/data' + image_dir + image_path).then((resolution, rejection) => {})
-					console.log('enqueue')
+
+					// enqueue post
 					q.enqueue('/data' + image_dir + image_path)
 				} catch (e) {
 					console.log(e)
@@ -103,13 +98,11 @@ async function login() {
 }
 
 main().then(async function(resolution, rejection) {
-	// console.log('done')
-	// TODO
-	// process.exit(0)
 
+	// login to ig via private api
 	await login()
-	console.log('finished login')
 
+	// define geolocation to associate w post
 	const { latitude, longitude, searchQuery } = {
 	    latitude: 0.0,
 	    longitude: 0.0,
@@ -117,24 +110,20 @@ main().then(async function(resolution, rejection) {
 	    searchQuery: 'place',
 	};
 
-
+	// define locations to pass as publish() param
 	const locations = await ig.search.location(latitude, longitude, searchQuery);
 
-
+	// define mediaLocation to pass as publish() param
 	const mediaLocation = locations[0];
 
-	// process.exit(0)
-
-
-	// TODO
-	console.log('finished main')
+	console.log('images scheduled to post :')
 	console.log(q.supporting_array)
 
+	// while there are still  images in queue to post, post each one
+	// sleep after each post, sleep duration specified in cmd line arg
 	while (q.supporting_array.length > 0) {
 		let next_post = q.dequeue()
-		// TODO
-		// upload image
-		// console.log(next_post)
+
 		const publishResult = await ig.publish.photo({
     	// read the file into a Buffer
     	file: await Bluebird.fromCallback(cb => fs.readFile(__dirname + next_post, cb)), location: mediaLocation, caption: 'my caption', usertags: {},

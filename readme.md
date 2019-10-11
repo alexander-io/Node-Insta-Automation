@@ -1,14 +1,40 @@
 ![sample 00](sample_output_images/00.png)
 ![sample 01](sample_output_images/01.png)
 
-run the program by exec xx.js passing in command line params, for example :
-node xx.js <username> <pw> <list_of_users> <time_between_posts_ms>
+
+## installation
+```bash
+# ensure nodejs is  installed
+node --version
+# ensure npm is installed
+npm --version
+# ensure git is installed
+git --version
+# ensure streamer is installed
+sudo apt install streamer -y
+# clone project repository
+git clone https://github.com/alexander-io/Node-Insta-Automation.git
+# move to project directory
+cd Node-Insta-Automation
+# install npm packages
+npm install
+# create a list of users
+echo "alxndr.fpv" > lists/my_list_of_users
+# run script
+# running the script takes 4 command line arguments
+# <username>, instagram account username
+# <pw>, instagram account password
+# <path_to_list_of_users>, usually contained in lists/ directory
+# <time_between_posts_ms>, the amount of time in milliseconds between  posts
+node xx.js <username> <pw> <path_to_list_of_users> <time_between_posts_ms>
+# the routine will begin aggregating data, storing image data, and scheduling posts
+```
 
 Within lists/ directory make a file (list_of_users) containing all of the usernames that you wish to aggregate content from
 
 The usernames should be newline separated, ex :
 
-first_username
-second_username
-...
+first_username\
+second_username\
+...\
 etc

@@ -29,7 +29,7 @@ L3 cache:              6144K\
 NUMA node0 CPU(s):     0-7\
 
 
-## installation
+## installation & execution
 ```bash
 # ensure nodejs is  installed
 node --version

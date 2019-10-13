@@ -112,10 +112,15 @@ main().then(async function(resolution, rejection) {
 	while (q.supporting_array.length > 0) {
 		let next_post = q.dequeue()
 
+		// TODO : check if post  has been made already in 'already_made' list
+		// if it already has been made, then skip posting and sleeping and go back to start of while loop
+
 		const publishResult = await ig.publish.photo({
     	// read the file into a Buffer
     	file: await Bluebird.fromCallback(cb => fs.readFile(__dirname + next_post, cb)), location: mediaLocation, caption: 'my caption', usertags: {},
 		});
+
+		// TODO : log post ID into 'alread_made' list
 
 		await funx.sleep(process.argv[5])
 	}

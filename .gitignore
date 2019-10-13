@@ -2,5 +2,4 @@ node_modules
 cookies
 lists/*
 data/*
-run.sh
-x.sh
+schedule.js

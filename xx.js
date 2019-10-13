@@ -75,19 +75,6 @@ let main = () => {
 	})
 }
 
-let captions = {
-	'pug.legendary' : [
-		'\n#pugs #pug #pugsofinstagram #puglife #dog #puglove #dogsofinstagram #dogs #pugnation #pugsnotdrugs #puppy #cute #pugpuppy #pugworld #pugstagram #pugoftheday',
-		'\n#puglovers #instapug #pugdog #dogstagram #puppiesofinstagram #puglover #love #like #pugloversclub #mops #pugbasement #puppies #puggle',
-		'\n#pets #instadog #petsofinstagram #pugpuppies #puggy #follow #dogsofinsta #worldofpug #pugsofig #popularpugs #fawnpug #pugglesofinstagram #smilingpugs',
-		'\n#dogoftheday #pugsrule #blackpug #pet #puglia #instagram #doglover #of #ilovemydog #carlino #ilovemypug #baby #dailypug #sophiathepugg #pugstyle #pugsoninstagram #dailydoseofpugs'
-	],
-	'dope.truck' : [
-		"\nRate this truck 1 - "+ Math.ceil(Math.random()*1000%150) +"\n\nTag a friend that would drive this truck : @truckporn \n\n#trucks #f #truck #x #ford #chevy #truckporn #dodge #offroad #diesel #trucking #trucksofinstagram #liftedtrucks #lifted #duramax #ram #cars #trucklife",
-		"\nRate this truck 1 - "+ Math.ceil(Math.random()*1000%150) +"\n\nTag a friend that would drive this truck : @truckporn \n\n#trucker #v #cummins #truckdaily #powerstroke #trucknation #gmc #dieseltrucks #s #truckdriver #truckerhat",
-		"\nRate this truck 1 - "+ Math.ceil(Math.random()*1000%150) +"\n\nTag a friend that would drive this truck : @truckporn \n\n#truck #4x4 #liftedtrucks #truckporn #yota #chevy #dodge #ford #offroad"
-	]
-}
 
 // login
 async function login() {

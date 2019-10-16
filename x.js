@@ -17,6 +17,22 @@ module.exports = {
       });
     }
 
+    file_exists_and_creation(path_to_file) {
+    	return new Promise((resolve, reject) => {
+    		try {
+    		  if (fs.existsSync(path_to_file)) {
+    				// file exists
+    				resolve()
+    		  } else {
+    				// file does not exist, so make it
+    				fs.writeFile(path_to_file)
+    			}
+    		} catch(err) {
+    		  console.error(err)
+    		}
+    	})
+    }
+
     formatPosts(rawPosts, username) {
       let result = [];
       rawPosts = JSON.parse(rawPosts)

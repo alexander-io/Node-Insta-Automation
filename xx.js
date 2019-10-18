@@ -107,21 +107,34 @@ main().then(async function(resolution, rejection) {
 	console.log('images scheduled to post :')
 	console.log(q.supporting_array)
 
+	// check if already_posted_list exists, if not create it
+	// this file is used to track the posts that have already been made
+	// TODO : breaks if this file isn't already created, fix this
+	funx.file_exists_and_creation('already_posted_list')
+	let already_posted_list = await funx.readFile('/already_posted_list')
+	console.log('already posted', already_posted_list)
+	// process.exit(0)
 	// while there are still  images in queue to post, post each one
 	// sleep after each post, sleep duration specified in cmd line arg
 	while (q.supporting_array.length > 0) {
 		let next_post = q.dequeue()
+		// read already posted file into mem
+		already_posted_list = await funx.readFile('/already_posted_list')
 
 		// TODO : check if post  has been made already in 'already_made' list
 		// if it already has been made, then skip posting and sleeping and go back to start of while loop
+		if (!already_posted_list.includes(next_post)) {
+			// post hasn't been made
+			const publishResult = await ig.publish.photo({
+	    	// read the file into a Buffer
+	    	file: await Bluebird.fromCallback(cb => fs.readFile(__dirname + next_post, cb)), location: mediaLocation, caption: 'my caption', usertags: {},
+			});
 
-		const publishResult = await ig.publish.photo({
-    	// read the file into a Buffer
-    	file: await Bluebird.fromCallback(cb => fs.readFile(__dirname + next_post, cb)), location: mediaLocation, caption: 'my caption', usertags: {},
-		});
+			// TODO : log post ID into 'alread_made' list
+			fs.appendFileSync('already_posted_list', next_post + '\r\n');
 
-		// TODO : log post ID into 'alread_made' list
 
-		await funx.sleep(process.argv[5])
+			await funx.sleep(process.argv[5])
+		}
 	}
 })

@@ -26,6 +26,7 @@ module.exports = {
     		  } else {
     				// file does not exist, so make it
     				fs.writeFile(path_to_file)
+
     			}
     		} catch(err) {
     		  console.error(err)
@@ -56,6 +57,7 @@ module.exports = {
       return result;
     }
 
+    // reads file into a list structure, resolve the list
     readFile(path_to_file) {
       return new Promise((resolve, reject) => {
         let result = [],

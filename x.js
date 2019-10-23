@@ -36,6 +36,12 @@ module.exports = {
     	})
     }
 
+    extract_id(string) {
+      let end_index = string.length - 4
+      let start_index = string.split('/', 3).join('/').length+1;
+      return string.substring(start_index,end_index)
+    }
+
     formatPosts(rawPosts, username) {
       let result = [];
       rawPosts = JSON.parse(rawPosts)

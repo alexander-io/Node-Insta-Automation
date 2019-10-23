@@ -19,7 +19,8 @@ var fs = require('fs')
 , x = require('./x.js')
 , funx = new x.funx()
 , q = new x.q()
-, child_process = require('child_process');
+, child_process = require('child_process')
+, id_to_text = {};
 
 let main = () => {
 	return new Promise(async function(resolve, reject) {
@@ -43,6 +44,11 @@ let main = () => {
 				all_posts.push(posts[post])
 			}
 		}
+
+		// TODO : build table of media_id -> text
+		// for (let i = 0; i < all_posts.length; i++) {
+		// 	id_to_text[all_posts[i].media_id] = all_posts[i].text
+		// }
 
 
 		for (let i = 0; i < all_posts.length; i++) {
@@ -126,7 +132,7 @@ main().then(async function(resolution, rejection) {
 			// post hasn't been made
 			const publishResult = await ig.publish.photo({
 	    	// read the file into a Buffer
-	    	file: await Bluebird.fromCallback(cb => fs.readFile(__dirname + next_post, cb)), location: mediaLocation, caption: 'my caption', usertags: {},
+	    	file: await Bluebird.fromCallback(cb => fs.readFile(__dirname + next_post, cb)), location: mediaLocation, caption: '#warren2020', usertags: {},
 			});
 
 			// log post ID into 'alread_made' list

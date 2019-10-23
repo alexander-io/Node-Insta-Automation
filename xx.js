@@ -19,7 +19,6 @@ var fs = require('fs')
 , x = require('./x.js')
 , funx = new x.funx()
 , q = new x.q()
-, observed_users = 0
 , child_process = require('child_process');
 
 let main = () => {
@@ -132,7 +131,6 @@ main().then(async function(resolution, rejection) {
 
 			// log post ID into 'alread_made' list
 			fs.appendFileSync('already_posted_list', next_post + '\r\n');
-
 
 			await funx.sleep(process.argv[5])
 		}

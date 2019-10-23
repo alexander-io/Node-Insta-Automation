@@ -1,7 +1,6 @@
 var fs = require('fs'),
     readline = require('readline'),
     ig_scrape = require('instagram-scraping'),
-    // XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest,
     request = require('request');
 
 module.exports = {
@@ -25,7 +24,10 @@ module.exports = {
     				resolve()
     		  } else {
     				// file does not exist, so make it
-    				fs.writeFile(path_to_file)
+    				fs.writeFile(path_to_file, '', (err) => {
+              if (err) throw err
+              console.log(path_to_file, 'created successfully')
+            })
 
     			}
     		} catch(err) {

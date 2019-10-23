@@ -113,7 +113,10 @@ main().then(async function(resolution, rejection) {
 	funx.file_exists_and_creation('already_posted_list')
 	let already_posted_list = await funx.readFile('/already_posted_list')
 	console.log('already posted', already_posted_list)
-	// process.exit(0)
+
+	console.log('done')
+	process.exit(0)
+
 	// while there are still  images in queue to post, post each one
 	// sleep after each post, sleep duration specified in cmd line arg
 	while (q.supporting_array.length > 0) {

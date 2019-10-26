@@ -46,9 +46,13 @@ let main = () => {
 		}
 
 		// TODO : build table of media_id -> text
-		// for (let i = 0; i < all_posts.length; i++) {
-		// 	id_to_text[all_posts[i].media_id] = all_posts[i].text
-		// }
+		for (let i = 0; i < all_posts.length; i++) {
+
+			id_to_text[all_posts[i].media_id] = all_posts[i].text
+		}
+
+		// console.log(id_to_text)
+		// process.exit(0)
 
 
 		for (let i = 0; i < all_posts.length; i++) {
@@ -129,10 +133,11 @@ main().then(async function(resolution, rejection) {
 		// check if post  has been made already in 'already_made' list
 		// if it already has been made, then skip posting and sleeping and go back to start of while loop
 		if (!already_posted_list.includes(next_post)) {
+			let caption = id_to_text[funx.extract_id(next_post)]
 			// post hasn't been made
 			const publishResult = await ig.publish.photo({
 	    	// read the file into a Buffer
-	    	file: await Bluebird.fromCallback(cb => fs.readFile(__dirname + next_post, cb)), location: mediaLocation, caption: '#warren2020', usertags: {},
+	    	file: await Bluebird.fromCallback(cb => fs.readFile(__dirname + next_post, cb)), location: mediaLocation, caption: caption, usertags: {},
 			});
 
 			// log post ID into 'alread_made' list

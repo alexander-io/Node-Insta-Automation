@@ -36,6 +36,10 @@ module.exports = {
     	})
     }
 
+
+    // this function is used to create keys for a table
+    // take in : '/data/283372531/2029528263885669117.jpg'
+    // put out : '2029528263885669117'
     extract_id(string) {
       let end_index = string.length - 4
       let start_index = string.split('/', 3).join('/').length+1;

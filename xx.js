@@ -101,8 +101,8 @@ main().then(async function(resolution, rejection) {
 
 	// define geolocation to associate w post
 	const { latitude, longitude, searchQuery } = {
-	    latitude: 0.0,
-	    longitude: 0.0,
+	    latitude: 38.9072,
+	    longitude: 77.0369,
 	    // not required
 	    searchQuery: 'place',
 	};

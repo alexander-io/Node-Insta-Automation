@@ -101,8 +101,8 @@ main().then(async function(resolution, rejection) {
 
 	// define geolocation to associate w post
 	const { latitude, longitude, searchQuery } = {
-	    latitude: 38.9072,
-	    longitude: 77.0369,
+	    latitude: 38.0,
+	    longitude: 77.0,
 	    // not required
 	    searchQuery: 'place',
 	};
@@ -135,15 +135,18 @@ main().then(async function(resolution, rejection) {
 		if (!already_posted_list.includes(next_post)) {
 			let caption = id_to_text[funx.extract_id(next_post)]
 			// post hasn't been made
-			const publishResult = await ig.publish.photo({
-	    	// read the file into a Buffer
-	    	file: await Bluebird.fromCallback(cb => fs.readFile(__dirname + next_post, cb)), location: mediaLocation, caption: caption, usertags: {},
-			});
+			try {
+				const publishResult = await ig.publish.photo({
+					// read the file into a Buffer
+					file: await Bluebird.fromCallback(cb => fs.readFile(__dirname + next_post, cb)), location: mediaLocation, caption: caption, usertags: {},
+				});
+				// log post ID into 'alread_made' list
+				fs.appendFileSync('already_posted_list', next_post + '\r\n');
 
-			// log post ID into 'alread_made' list
-			fs.appendFileSync('already_posted_list', next_post + '\r\n');
-
-			await funx.sleep(process.argv[5])
+				await funx.sleep(process.argv[5])
+			} catch (e) {
+				console.log(e)
+			}
 		}
 	}
 })

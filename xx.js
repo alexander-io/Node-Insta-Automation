@@ -101,20 +101,21 @@ main().then(async function(resolution, rejection) {
 
 	// define geolocation to associate w post
 	const { latitude, longitude, searchQuery } = {
-	    latitude: 38.0,
-	    longitude: 77.0,
+	    latitude: 38.9072,
+	    longitude: -77.0369,
 	    // not required
-	    searchQuery: 'place',
+	    searchQuery: 'washington',
 	};
 
 	// define locations to pass as publish() param
 	const locations = await ig.search.location(latitude, longitude, searchQuery);
 
-	// define mediaLocation to pass as publish() param
-	const mediaLocation = locations[0];
-
 	console.log('images scheduled to post :')
 	console.log(q.supporting_array)
+
+	// define mediaLocation to pass as publish() param
+	const mediaLocation = locations[0];
+	console.log('location', mediaLocation)
 
 	// check if already_posted_list exists, if not create it
 	// this file is used to track the posts that have already been made

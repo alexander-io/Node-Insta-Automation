@@ -1,3 +1,4 @@
+## Sample Output
 ![sample 00](sample_output_images/00.png)
 ![sample 01](sample_output_images/01.png)
 
@@ -29,7 +30,7 @@ L3 cache:              6144K\
 NUMA node0 CPU(s):     0-7\
 
 
-## installation & execution
+## Installation & Execution
 ```bash
 # ensure nodejs is  installed
 node --version

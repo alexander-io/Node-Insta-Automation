@@ -37,8 +37,6 @@ node --version
 npm --version
 # ensure git is installed
 git --version
-# ensure streamer is installed
-sudo apt install streamer -y
 # clone project repository
 git clone https://github.com/alexander-io/Node-Insta-Automation.git
 # move to project directory

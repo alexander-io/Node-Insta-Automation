@@ -47,13 +47,8 @@ let main = () => {
 
 		// TODO : build table of media_id -> text
 		for (let i = 0; i < all_posts.length; i++) {
-
 			id_to_text[all_posts[i].media_id] = all_posts[i].text
 		}
-
-		// console.log(id_to_text)
-		// process.exit(0)
-
 
 		for (let i = 0; i < all_posts.length; i++) {
 

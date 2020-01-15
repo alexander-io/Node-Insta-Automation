@@ -46,7 +46,7 @@ cd Node-Insta-Automation
 npm install
 # create a list of users
 mkdir lists
-echo "alxndr.fpv" > lists/my_list_of_users
+echo "alxndr.io" > lists/my_list_of_users
 # run script
 # running the script takes 4 command line arguments
 # <username>, instagram account username

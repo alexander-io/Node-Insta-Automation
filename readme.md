@@ -45,6 +45,7 @@ cd Node-Insta-Automation
 # install npm packages
 npm install
 # create a list of users
+mkdir lists
 echo "alxndr.fpv" > lists/my_list_of_users
 # run script
 # running the script takes 4 command line arguments
